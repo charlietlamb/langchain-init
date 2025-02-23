@@ -5,7 +5,7 @@ from langchain.chat_models import init_chat_model
 
 load_dotenv()
 
-model = init_chat_model("gpt-3o-mini", model_provider="openai")
+model = init_chat_model("gpt-4-turbo", model_provider="openai")
 
 # Pydantic
 class Joke(BaseModel):
@@ -18,6 +18,9 @@ class Joke(BaseModel):
     )
 
 
-structured_llm = model.with_structured_output(Joke)
+structured_llm = model.bind_tools([Joke])
 
-structured_llm.invoke("Tell me a joke about cats")
+chat = structured_llm.invoke("Tell me a joke about cats")
+
+print(chat)
+print(chat.additional_kwargs)
